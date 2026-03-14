@@ -1,0 +1,239 @@
+{
+  "fields": [
+    {
+      "name": "case_id",
+      "type": "string",
+      "source": {
+        "method": "regex",
+        "pattern": "Case\\s*ID[:\\s]*([A-Za-z0-9_-]+)",
+        "flags": [
+          "IGNORECASE",
+          "MULTILINE"
+        ]
+      },
+      "xml": {
+        "xpath": ".//Case/ID"
+      },
+      "normalize": [
+        "strip"
+      ],
+      "comparison": {
+        "mode": "exact"
+      }
+    },
+    {
+      "name": "patient_initials",
+      "type": "string",
+      "source": {
+        "method": "regex",
+        "pattern": "Patient\\s*Initials[:\\s]*([A-Z]{1,3})",
+        "flags": [
+          "IGNORECASE"
+        ]
+      },
+      "xml": {
+        "xpath": ".//Patient/Initials"
+      },
+      "normalize": [
+        "upper",
+        "strip"
+      ],
+      "comparison": {
+        "mode": "exact"
+      }
+    },
+    {
+      "name": "age",
+      "type": "int",
+      "source": {
+        "method": "regex",
+        "pattern": "Age[:\\s]*(\\d{1,3})",
+        "flags": [
+          "IGNORECASE"
+        ]
+      },
+      "xml": {
+        "xpath": ".//Patient/Age"
+      },
+      "normalize": [
+        "strip"
+      ],
+      "comparison": {
+        "mode": "numeric",
+        "tolerance": 0
+      }
+    },
+    {
+      "name": "sex",
+      "type": "enum",
+      "allowed_values": [
+        "male",
+        "female",
+        "unknown"
+      ],
+      "source": {
+        "method": "regex",
+        "pattern": "Sex[:\\s]*(Male|Female|Unknown)",
+        "flags": [
+          "IGNORECASE"
+        ]
+      },
+      "xml": {
+        "xpath": ".//Patient/Sex"
+      },
+      "normalize": [
+        "lower",
+        "strip"
+      ],
+      "comparison": {
+        "mode": "exact"
+      }
+    },
+    {
+      "name": "country",
+      "type": "string",
+      "source": {
+        "method": "regex",
+        "pattern": "Country[:\\s]*([A-Za-z\\s]+)",
+        "flags": [
+          "IGNORECASE"
+        ]
+      },
+      "xml": {
+        "xpath": ".//Report/Country"
+      },
+      "normalize": [
+        "collapse_whitespace",
+        "strip",
+        "lower"
+      ],
+      "comparison": {
+        "mode": "fuzzy",
+        "fuzzy_threshold": 0.85
+      }
+    },
+    {
+      "name": "product_name",
+      "type": "string",
+      "source": {
+        "method": "regex",
+        "pattern": "Product\\s*Name[:\\s]*([A-Za-z0-9 \\-/]+)",
+        "flags": [
+          "IGNORECASE"
+        ]
+      },
+      "xml": {
+        "xpath": ".//Drug/ProductName"
+      },
+      "normalize": [
+        "collapse_whitespace",
+        "strip",
+        "upper"
+      ],
+      "comparison": {
+        "mode": "fuzzy",
+        "fuzzy_threshold": 0.9
+      }
+    },
+    {
+      "name": "event_term",
+      "type": "string",
+      "source": {
+        "method": "regex",
+        "pattern": "Event\\s*Term[:\\s]*([A-Za-z0-9 \\-/]+)",
+        "flags": [
+          "IGNORECASE"
+        ]
+      },
+      "xml": {
+        "xpath": ".//AdverseEvent/Term"
+      },
+      "normalize": [
+        "collapse_whitespace",
+        "strip",
+        "lower"
+      ],
+      "comparison": {
+        "mode": "fuzzy",
+        "fuzzy_threshold": 0.85
+      }
+    },
+    {
+      "name": "event_date",
+      "type": "date",
+      "source": {
+        "method": "regex",
+        "pattern": "Event\\s*Date[:\\s]*([0-9A-Za-z\\-/ ,.]+)",
+        "flags": [
+          "IGNORECASE"
+        ]
+      },
+      "xml": {
+        "xpath": ".//AdverseEvent/Date"
+      },
+      "normalize": [
+        "strip"
+      ],
+      "comparison": {
+        "mode": "date",
+        "date_tolerance_days": 0
+      }
+    },
+    {
+      "name": "seriousness",
+      "type": "enum",
+      "allowed_values": [
+        "serious",
+        "non-serious",
+        "unknown"
+      ],
+      "source": {
+        "method": "regex",
+        "pattern": "Seriousness[:\\s]*(Serious|Non-Serious|Unknown)",
+        "flags": [
+          "IGNORECASE"
+        ]
+      },
+      "xml": {
+        "xpath": ".//AdverseEvent/Seriousness"
+      },
+      "normalize": [
+        "lower",
+        "strip"
+      ],
+      "comparison": {
+        "mode": "exact"
+      }
+    },
+    {
+      "name": "outcome",
+      "type": "enum",
+      "allowed_values": [
+        "recovered",
+        "recovering",
+        "not recovered",
+        "fatal",
+        "unknown"
+      ],
+      "source": {
+        "method": "regex",
+        "pattern": "Outcome[:\\s]*([A-Za-z ]+)",
+        "flags": [
+          "IGNORECASE"
+        ]
+      },
+      "xml": {
+        "xpath": ".//AdverseEvent/Outcome"
+      },
+      "normalize": [
+        "lower",
+        "collapse_whitespace",
+        "strip"
+      ],
+      "comparison": {
+        "mode": "fuzzy",
+        "fuzzy_threshold": 0.95
+      }
+    }
+  ]
+}
